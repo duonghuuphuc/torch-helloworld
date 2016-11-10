@@ -48,6 +48,54 @@
             </ul>
         </p>
 
+        <h3>
+          <a id="neural-network-with-torch" class="anchor" href="#neural-network-with-torch" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Neural Network with Torch
+        </h3>
+
+        <p>
+            In Torch, the <code>nn</code> is the main package to build and train from simple to complex neural network model. To begin working with Torch, you need to define the following things:
+            <ul class="task-list">
+                <li>Model</li>
+                <li>Training</li>
+                <li>Data</li>
+                <li>Training. You want to implement your own training loop or use the pre-implemented methods. And the loss function (called <code>Criterion</code> in Torch)</li>
+            </ul>
+        </p>
+
+        <h3>
+          <a id="model" class="anchor" href="#model" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Model
+        </h3>
+
+        <p>
+            The first thing in working with Torch is that you need to define a model. For example, you want a feed-forward network, a convolutional network, or a recurrent neural network. You also define the number of hidden layers, the number of hidden units for
+            each layer, and the activation function which you want to use on each layer.<br> The <code>nn</code> package defines the containers as follows:
+            <ul class="task-list">
+                <li><code>nn.Sequential</code>: plugs layers in a feed-forward fully connected manner</li>
+                <li><code>nn.Parallel</code>: plugs each element of input Tensor to different layers</li>
+                <li><code>nn.Concat</code>: concatenates in one layer several modules along dimension <code>dim</code></li>
+                <li><code>nn.Bottle</code>: allows any dimensionality input be forwarded through a module</li>
+            </ul>
+            In many cases, we use <code>nn.Sequential</code> since it's the most easy approach to feed data to the network, thus the program will look like:<br>
+            <pre>
+              <code>
+                require "nn"
+                mlp = nn.Sequential()
+              </code>
+            </pre><br> Next, to tranform data between layers, we can simply use the linear transfer function (<code>nn.Linear</code>) or the non-linear representation of input data (<code>nn.Sigmoid</code>, <code>nn.Tanh</code>,
+            <code>nn.ReLU</code>, ...). Let's assume that we want a network with two hidden layers, a 4-dimensional input, 4 units in each layer, and the transfer function is <code>nn.Tanh</code>.
+            <pre>
+              <code>
+                input = 4
+                hiddenLayer1 = 4
+                hiddenLayer2 = 4<br>
+                mlp:add(nn.Linear(input, hiddenLayer1))
+                mlp:add(nn.Tanh())
+                mlp:add(nn.Linear(hiddenLayer1, hiddenLayer2))
+                mlp:add(nn.Tanh())
+              </code>
+            </pre>
+        </p>
+
         <!-- FOOTER -->
         <footer class="site-footer">
             <span class="site-footer-owner"><a href="https://github.com/duonghuuphuc/torch-helloworld">Torch HelloWorld</a> is maintained by <a href="http://it.tdt.edu.vn/~dhphuc/" target="_blank" title="Lecturer, Faculty of Information Technology, Ton Duc Thang University, Vietnam">Phuc H. Duong</a>.</span>
