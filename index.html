@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Torch HelloWorld - Phuc Duong</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
+</head>
+
+<body>
+    <section class="page-header">
+        <h1 class="project-name">Torch HelloWorld</h1>
+        <h2 class="project-tagline">Working with Torch in Windows Environment</h2>
+        <a href="https://github.com/duonghuuphuc/torch-helloworld" class="btn" target="_blank">View on GitHub</a>
+        <a href="https://github.com/duonghuuphuc/torch-helloworld/zipball/master" class="btn" target="_blank">Download .zip</a>
+        <a href="https://github.com/duonghuuphuc/torch-helloworld/tarball/master" class="btn" target="_blank">Download .tar.gz</a>
+    </section>
+
+    <section class="main-content">
+        <h3>
+          <a id="introduction" class="anchor" href="#introduction" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Introduction
+        </h3>
+
+        <p>
+            There are many Neural Network libraries available on the internet today. For example, you're familiar with Python, you can take advantage of <a href="https://www.tensorflow.org/" target="_blank">TensorFlow</a>, <a href="http://scikit-learn.org/"
+                target="_blank">sci-kit learn</a>. Or Java, you can use <a href="https://deeplearning4j.org" target="_blank">DeepLearning4J</a>. From my mentor's recommendation, I switch to <a href="http://torch.ch/" target="_blank">Torch</a>, a good and
+            easy to know framework for working with Neural Network models. In this article, I will focus on how-to use Torch for beginner, by going through my Hello World program. In my opinion, learning from Hello World program is a good approach for
+            getting started with new programming language. Besides that, as my knowledge, until the day this article goes online, this's the first article introduces about working with <a href="http://torch.ch/" target="_blank">Torch</a> in Microsoft
+            Windows environment in the most easy way.
+        </p>
+
+        <h3>
+          <a id="prerequisites" class="anchor" href="#prerequisites" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Prerequisites
+        </h3>
+
+        <p>
+            In order to working with my example program, and also know what I'll present, you need have the following prerequisites:
+            <ul class="task-list">
+                <li>Microsoft Windows 10 (Version 1607), aka Windows 10 Anniversary Update</li>
+                <li><strong>Bash on Ubuntu on Windows</strong> is enabled [<a href="https://msdn.microsoft.com/en-us/commandline/wsl/install_guide" target="_blank">Readme</a>]</li>
+                <li><strong>Torch</strong> is installed in virtual Ubuntu on Windows [<a href="http://torch.ch/docs/getting-started.html" target="_blank">Readme</a>]</li>
+                <li>Basic understanding of <strong>Lua</strong> programming language [<a href="https://www.tutorialspoint.com/lua/" target="_blank">Readme</a>]</li>
+                <li>Basic understanding of machine learning, artificial neural network [<a href="http://cs229.stanford.edu/" target="_blank">ML</a> | <a href="https://en.wikipedia.org/wiki/Artificial_neural_network" target="_blank">ANN</a>]</li>
+            </ul>
+        </p>
+
+        <h3>
+          <a id="neural-network-with-torch" class="anchor" href="#neural-network-with-torch" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Neural Network with Torch
+        </h3>
+
+        <p>
+            In Torch, the <code>nn</code> is the main package to build and train from simple to complex neural network model. To begin working with Torch, you need to define the following things:
+            <ul class="task-list">
+                <li>Model</li>
+                <li>Training</li>
+                <li>Data</li>
+            </ul>
+        </p>
+
+        <h3>
+          <a id="model" class="anchor" href="#model" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Model
+        </h3>
+
+        <p>
+            The first thing in working with Torch is that you need to define a model. For example, you want a feed-forward network, a convolutional network, or a recurrent neural network. You also define the number of hidden layers, the number of hidden units for
+            each layer, and the activation function which you want to use on each layer.<br> The <code>nn</code> package defines the containers as follows:
+            <ul class="task-list">
+                <li><code>nn.Sequential</code>: plugs layers in a feed-forward fully connected manner</li>
+                <li><code>nn.Parallel</code>: plugs each element of input Tensor to different layers</li>
+                <li><code>nn.Concat</code>: concatenates in one layer several modules along dimension <code>dim</code></li>
+                <li><code>nn.Bottle</code>: allows any dimensionality input be forwarded through a module</li>
+            </ul>
+            In many cases, we use <code>nn.Sequential</code> since it's the most easy approach to feed data to the network, thus the program will look like:<br>
+            <pre>
+              <code>
+                require "nn"
+                mlp = nn.Sequential()
+              </code>
+            </pre><br> Next, to tranform data between layers, we can simply use the linear transfer function (<code>nn.Linear</code>) or the non-linear representation of input data (<code>nn.Sigmoid</code>, <code>nn.Tanh</code>,
+            <code>nn.ReLU</code>, ...). Let's assume that we want a network with two hidden layers, a 4-dimensional input, 4 units in each layer, and the transfer function is <code>nn.Tanh</code>.
+            <pre>
+              <code>
+                input = 4
+                hiddenLayer1 = 4
+                hiddenLayer2 = 4<br>
+                mlp:add(nn.Linear(input, hiddenLayer1))
+                mlp:add(nn.Tanh())
+                mlp:add(nn.Linear(hiddenLayer1, hiddenLayer2))
+                mlp:add(nn.Tanh())
+              </code>
+            </pre>
+        </p>
+
+        <!-- FOOTER -->
+        <footer class="site-footer">
+            <span class="site-footer-owner"><a href="https://github.com/duonghuuphuc/torch-helloworld">Torch HelloWorld</a> is maintained by <a href="http://it.tdt.edu.vn/~dhphuc/" target="_blank" title="Lecturer, Faculty of Information Technology, Ton Duc Thang University, Vietnam">Phuc H. Duong</a>.</span>
+
+            <span class="site-footer-credits">&copy; 2016 DHPIT. Last updated 10/11/2016 - 4:55 PM (GMT+7)</span>
+        </footer>
+
+    </section>
+
+
+</body>
+
+</html>
