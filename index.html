@@ -30,7 +30,7 @@
                 target="_blank">sci-kit learn</a>. Or Java, you can use <a href="https://deeplearning4j.org" target="_blank">DeepLearning4J</a>. From my mentor's recommendation, I switch to <a href="http://torch.ch/" target="_blank">Torch</a>, a good and
             easy to know framework for working with Neural Network models. In this article, I will focus on how-to use Torch for beginner, by going through my Hello World program. In my opinion, learning from Hello World program is a good approach for
             getting started with new programming language. Besides that, as my knowledge, until the day this article goes online, this's the first article introduces about working with <a href="http://torch.ch/" target="_blank">Torch</a> in Microsoft
-            Windows environment in the most easy way.
+            Windows environment in an easy way.
         </p>
 
         <h3>
@@ -85,14 +85,47 @@
             <pre>
               <code>
                 input = 4
+                output = 2
                 hiddenLayer1 = 4
                 hiddenLayer2 = 4<br>
                 mlp:add(nn.Linear(input, hiddenLayer1))
                 mlp:add(nn.Tanh())
                 mlp:add(nn.Linear(hiddenLayer1, hiddenLayer2))
                 mlp:add(nn.Tanh())
+                mlp:add(nn.Linear(hiddenLayer2, output))
+                mlp:add(nn.LogSoftMax())
               </code>
-            </pre>
+            </pre> The last two lines in above program declare the output layer. In this case, we define an output in 2-dimension, that means, our task is binary classificaton, and thus the <code>nn.LogSoftMax()</code> is the most common choice.<br>We
+            should print our model to check whether it fits our need, by insert the following line:
+            <pre>
+              <code>
+                print(mlp)
+              </code>
+            </pre> Now, at this point of the program, you can compile and run it. To execute this program, first, you have to save this file with the file extension is <code>.lua</code>, for example, named <code>sample.lua</code>. Then, open
+            the <strong>Bash on Ubuntu on Windows</strong>, and type the command as follows (you can use the <code>cd</code> command to change to directory of your saved file).
+            <pre>
+              <code>
+                <strong>th</strong> sample.lua
+              </code>
+            </pre> The program is executed, and print the following lines on the screen:
+            <pre>
+              <code>
+                nn.Sequential {
+                  [input -> (1) -> (2) -> (3) -> (4) -> output]
+                  (1): nn.Linear(4 -> 4)
+                  (2): nn.Tanh
+                  (3): nn.Linear(4 -> 2)
+                  (4): nn.LogSoftMax
+                }
+              </code>
+            </pre> To pre-test your model properly works and do what it's supposed to do, you can take the advantage of <code>Module:forward</code>.
+            <pre>
+              <code>
+                preTest = mlp:forward(torch.randn(1,10))
+                print(preTest)
+              </code>
+            </pre> When execute the program, it will return a Tensor data of size <code>1 x 2</code>, in which the <code>preTest[1][i]</code> is log probability belongs to class <code>i</code> of the input, respectively. Note that, in Lua,
+            the index of <code>Tensor</code> starts at <code>1</code>.
         </p>
 
         <!-- FOOTER -->
@@ -106,5 +139,8 @@
 
 
 </body>
+
+</html>
+
 
 </html>
