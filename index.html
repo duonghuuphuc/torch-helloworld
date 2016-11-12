@@ -5,10 +5,20 @@
     <meta charset="UTF-8">
     <title>Torch HelloWorld - Phuc Duong</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Torch HelloWorld - Working with Torch in Windows Environment - Phuc Duong" />
+    <meta name="keywords" content="Torch,Windows,HelloWorld,Phuc Duong,Duong Huu Phuc,Phuc H. Duong,Dương Hữu Phúc" />
+    <meta property="og:title" content="Torch HelloWorld - Phuc Duong" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="http://torch.dhpit.com" />
+    <meta property="og:image" content="http://torch.dhpit.com/img/dhp.png" />
+    <meta property="og:description" content="Torch HelloWorld - Working with Torch in Windows Environment - Phuc Duong" />
     <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
     <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
+    <link rel="icon" href="img/favicon.ico" type="image/x-icon" />
+    <link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon" />
+    <link rel="author" href="https://plus.google.com/+HuuPhucDuong" />
 </head>
 
 <body>
@@ -125,14 +135,94 @@
                 print(preTest)
               </code>
             </pre> When execute the program, it will return a Tensor data of size <code>1 x 2</code>, in which the <code>preTest[1][i]</code> is log probability belongs to class <code>i</code> of the input, respectively. Note that, in Lua,
-            the index of <code>Tensor</code> starts at <code>1</code>.
+            the index of <code>Tensor</code> starts at <code>1</code>. Below is the graphical representation of our NN model.
+            <!-- INSERT IMAGE HERE ! -->
+        </p>
+
+        <h3>
+          <a id="training" class="anchor" href="#training" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Training
+        </h3>
+
+        <p>
+            In previous section, we had our NN model. Now, we have to define a training algorithm, as <code>nn</code> package provides us two approaches: (1) implement your own training algorithm, that means, you define from taking input, feeding to layers,
+            computing gradients, and update model's paremeters; or (2) you can take advantage of pre-implemented <code>nn.StochasticGradient</code> method. The <code>nn.StochasticGradient</code> takes the our defined model, and a loss function (<code>Criterion</code>).
+            There are many <code>Criterion</code> in <code>nn</code> package (<em>e.g.</em>, <code>CrossEntropyCriterion</code>, <code>MSECriterion</code>, <code>CosineEmbeddingCriterion</code>), and we use the negative log-likelihood criterion, since
+            it usually goes with <code>nn.LogSoftMax</code>. Besides that, another important parameter for <code>nn.StochasticGradient</code> is <code>learningRate</code>.
+
+            <pre>
+              <code>
+                criterion = nn.ClassNLLCriterion()
+                trainer = nn.StochasticGradient(mlp, criterion)
+                trainer.learningRate = 0.1
+              </code>
+            </pre>
+        </p>
+
+        <h3>
+          <a id="data" class="anchor" href="#data" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Data
+        </h3>
+
+        <p>
+            Until now, the last important thing is training dataset. Let's assume our dataset is stored in <a href="https://en.wikipedia.org/wiki/Comma-separated_values" target="_blank">CSV</a> format. Since Torch doesn't support splitting method, we
+            need to define such method as follows.
+
+            <pre>
+              <code>
+                <span style="color:green">-- Split input string at comma symbols</span>
+                <strong>function</strong> string:splitAtCommas()
+                  <strong>local</strong> sep, output = ",", {}
+                  <strong>local</strong> pattern = string.format("([^%s]+)", sep)
+                  self:<strong>gsub</strong>(pattern, <strong>function</strong>(c) output[#output+1] = c <strong>end</strong>)
+                  <strong>return</strong> output
+                <strong>end</strong>
+
+                <span style="color:green">-- Read the dataFile and return a variable in Tensor data structure</span>
+                <strong>function</strong> loadData(dataFile)
+                  <strong>local</strong> dataset = {}
+                  <strong>local</strong> i = 1
+                  <strong>for</strong> line in io.lines(dataFile) <strong>do</strong>
+                    <strong>local</strong> values = line:splitAtCommas()
+                    <strong>local</strong> y = torch.Tensor(1)
+                    y[1] = values[#values]	-- the last number in line is class
+                    values[#values] = nil
+                    <strong>local</strong> x = torch.Tensor(values)	-- all other numbers are input
+                    dataset[i] = {x, y}
+                    i = i + 1
+                  <strong>end</strong>
+                  <strong>function</strong> dataset:size() return (i - 1) <strong>end</strong>  -- the requirement mentioned
+                  <strong>return</strong> dataset
+                <strong>end</strong>
+              </code>
+            </pre> Then, the method <code>nn.StochasticGradient:train</code> is called to begin training process.
+
+            <pre>
+              <code>
+                <span style="color:green">---- Load the dataset</span>
+                dataset = loadData("train.csv")
+
+                <span style="color:green">---- Training model with given dataset</span>
+                trainer:train(dataset)
+              </code>
+            </pre>
+        </p>
+
+        <h3>
+          <a id="contributor" class="anchor" href="#contributor" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Contributor
+        </h3>
+
+        <p>
+            <ul class="task-list">
+                <li>Phuc Duong</li>
+                <li>Duy Nguyen <em>(Student)</em></li>
+                <li>Huy Nguyen <em>(Student)</em></li>
+            </ul>
         </p>
 
         <!-- FOOTER -->
         <footer class="site-footer">
-            <span class="site-footer-owner"><a href="https://github.com/duonghuuphuc/torch-helloworld">Torch HelloWorld</a> is maintained by <a href="http://it.tdt.edu.vn/~dhphuc/" target="_blank" title="Lecturer, Faculty of Information Technology, Ton Duc Thang University, Vietnam">Phuc H. Duong</a>.</span>
+            <span class="site-footer-owner"><a href="https://github.com/duonghuuphuc/torch-helloworld" target="_blank">Torch HelloWorld</a> is maintained by <a href="http://it.tdt.edu.vn/~dhphuc/" target="_blank" title="Lecturer, Faculty of Information Technology, Ton Duc Thang University, Vietnam">Phuc H. Duong</a>.</span>
 
-            <span class="site-footer-credits">&copy; 2016 DHPIT. Last updated 10/11/2016 - 4:55 PM (GMT+7)</span>
+            <span class="site-footer-credits">&copy; 2016 DHPIT. Last updated 12/11/2016 - 4:55 PM (GMT+7)</span>
         </footer>
 
     </section>
@@ -144,3 +234,4 @@
 
 
 </html>
+l> tml> l>
