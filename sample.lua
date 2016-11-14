@@ -40,10 +40,10 @@ function string:splitAtCommas()
   return output
 end
 
-function loadData(dataFile)
+function loadData(filePath)
   local dataset = {}
   local i = 1
-  for line in io.lines(dataFile) do
+  for line in io.lines(filePath) do
     local values = line:splitAtCommas()
     local y = torch.Tensor(1)
     y[1] = values[#values]	-- the last number in line is class
@@ -61,3 +61,56 @@ dataset = loadData("train.csv")
 
 ---- Training model with given dataset
 trainer:train(dataset)
+
+
+
+-- PREDICTION AND EVALUATION
+function argmax(v)
+  local max = torch.max(v)
+  for i = 1, v:size(1) do
+    if v[i] == max then
+      return i
+    end
+  end
+end
+
+function evaluation(filePath)
+  local total = 0
+  local positive = 0
+
+  for line in io.lines(filePath) do
+    local values = line:splitAtCommas()
+    local y = torch.Tensor(1)
+    y[1] = values[#values]
+    values[#values] = nil
+    local x = torch.Tensor(values)
+    local prediction = argmax(mlp:forward(x))
+    if math.floor(prediction) == math.floor(y[1]) then
+      positive = positive + 1
+    end
+    total = total + 1
+  end
+
+  return (positive / total) * 100
+end
+
+---- Read the testset and compute the accuracy
+accuracy = evaluation("test.csv")
+print("Accuracy(%) is " .. accuracy)
+
+
+
+--[[
+-- Print the weight matrix
+print("Weights of saved model: ")
+print(mlp:get(1)) -- Get the first module of our model, i.e. nn.Linear(4 -> 4)
+print(mlp:get(1).weight)  -- Get the weight matrix of that layer
+
+
+-- Save the trained model
+torch.save("file.th", mlp)
+
+-- Load the saved model
+mlp2 = torch.load("file.th")
+print(mlp2:get(1).weight)
+--]]
