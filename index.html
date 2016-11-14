@@ -43,6 +43,22 @@
             Windows environment in an easy way.
         </p>
 
+        <p>
+            <strong>Content</strong>
+            <ol class="task-list">
+                <li><a href="#prerequisites">Prerequisites</a></li>
+                <li><a href="#neural-network-with-torch">Neural Network with Torch</a></li>
+                <ol class="task-list">
+                    <li><a href="#model">Model</a></li>
+                    <li><a href="#training">Training</a></li>
+                    <li><a href="#data">Data</a></li>
+                    <li><a href="#evaluation">Evaluation</a></li>
+                </ol>
+                <li><a href="#contributors">Contributors</a></li>
+				<li><a href="#contact">Contact</a></li>
+            </ol>
+        </p>
+
         <h2>
           <a id="prerequisites" class="anchor" href="#prerequisites" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Prerequisites
         </h2>
@@ -68,6 +84,7 @@
                 <li>Model</li>
                 <li>Training</li>
                 <li>Data</li>
+                <li>Evaluation</li>
             </ul>
         </p>
 
@@ -171,22 +188,22 @@
               <code>
                 <span style="color:green">-- Split input string at comma symbols</span>
                 <strong>function</strong> string:splitAtCommas()
-                  <strong>local</strong> sep, output = ",", {}
-                  <strong>local</strong> pattern = string.format("([^%s]+)", sep)
+                  <strong><strong>local</strong></strong> sep, output = ",", {}
+                  <strong><strong>local</strong></strong> pattern = string.format("([^%s]+)", sep)
                   self:<strong>gsub</strong>(pattern, <strong>function</strong>(c) output[#output+1] = c <strong>end</strong>)
                   <strong>return</strong> output
                 <strong>end</strong>
 
                 <span style="color:green">-- Read the dataFile and return a variable in Tensor data structure</span>
                 <strong>function</strong> loadData(dataFile)
-                  <strong>local</strong> dataset = {}
-                  <strong>local</strong> i = 1
+                  <strong><strong>local</strong></strong> dataset = {}
+                  <strong><strong>local</strong></strong> i = 1
                   <strong>for</strong> line in io.lines(dataFile) <strong>do</strong>
-                    <strong>local</strong> values = line:splitAtCommas()
-                    <strong>local</strong> y = torch.Tensor(1)
+                    <strong><strong>local</strong></strong> values = line:splitAtCommas()
+                    <strong><strong>local</strong></strong> y = torch.Tensor(1)
                     y[1] = values[#values]	-- the last number in line is class
                     values[#values] = nil
-                    <strong>local</strong> x = torch.Tensor(values)	-- all other numbers are input
+                    <strong><strong>local</strong></strong> x = torch.Tensor(values)	-- all other numbers are input
                     dataset[i] = {x, y}
                     i = i + 1
                   <strong>end</strong>
@@ -207,32 +224,105 @@
             </pre>
         </p>
 
+        <h3>
+          <a id="evaluation" class="anchor" href="#evaluation" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Evaluation
+        </h3>
+
+        <p>
+            After successfully training our NN model, we now need to evaluate and compute the accuracy of our model. This step can be done by using the two functions below. The first one, named <code>argmax(v)</code>, and the second is <code>evluation(filePath)</code>,
+            which takes the test dataset (in CSV format) and returns the accuracy of the current model (in percentage).
+            <pre>
+              <code>
+                <span style="color:green">---- argmax</span>
+                <strong>function</strong> argmax(v)
+                  <strong>local</strong> max = torch.max(v)
+                  <strong>for</strong> i = 1, v:size(1) <strong>do</strong>
+                    <strong>if</strong> v[i] == max <strong>then</strong>
+                      <strong>return</strong> i
+                    <strong>end</strong>
+                  <strong>end</strong>
+                <strong>end</strong>
+
+                <span style="color:green">---- Evaluate and compute the accuracy</span>
+                <strong>function</strong> evaluation(filePath)
+                  <strong>local</strong> total = 0
+                  <strong>local</strong> positive = 0
+
+                  <strong>for</strong> line in io.lines(filePath) <strong>do</strong>
+                    <strong>local</strong> values = line:splitAtCommas()
+                    <strong>local</strong> y = torch.Tensor(1)
+                    y[1] = values[#values]
+                    values[#values] = nil
+                    <strong>local</strong> x = torch.Tensor(values)
+                    <strong>local</strong> prediction = argmax(mlp:forward(x))
+                    <strong>if</strong> math.floor(prediction) == math.floor(y[1]) <strong>then</strong>
+                      positive = positive + 1
+                    <strong>end</strong>
+                    total = total + 1
+                  <strong>end</strong>
+
+                  <strong>return</strong> (positive / total) * 100
+                <strong>end</strong>
+
+                <span style="color:green">---- Read the testset and compute the accuracy</span>
+                accuracy = evaluation("test.csv")
+                print("Accuracy(%) is " .. accuracy)
+              </code>
+            </pre> If we want to view the weight matrices of our model, we can use the command below.
+
+            <pre>
+              <code>
+                <span style="color:green">---- Print the weight matrix</span>
+                print("Weights of saved model: ")
+                print(mlp:get(1)) <span style="color:green;font-style:italic">-- Get the first module of our model, i.e. nn.Linear(4 -> 4)</span>
+                print(mlp:get(1).weight)  <span style="color:green;font-style:italic">-- Get the weight matrix of that layer</span>
+              </code>
+            </pre> In case we want to save the model and load it later, we can use the following lines of code.
+
+            <pre>
+              <code>
+                <span style="color:green">---- Save the model to file</span>
+                torch.save("file.th", mlp)
+
+                <span style="color:green">---- Load the saved model</span>
+                mlp2 = torch.load("file.th")
+                print(mlp2:get(1).weight)
+              </code>
+            </pre>
+        </p>
+
         <h2>
-          <a id="contributor" class="anchor" href="#contributor" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Contributor
+          <a id="contributors" class="anchor" href="#contributors" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Contributors
         </h2>
 
         <p>
             <ul class="task-list">
-                <li>Phuc Duong</li>
-                <li>Duy Nguyen <em>(Student)</em></li>
-                <li>Huy Nguyen <em>(Student)</em></li>
+                <li>Phuc Duong - <a href="mailto:huuphucduong@gmail.com">huuphucduong@gmail.com</a></li>
+                <li>Duy Nguyen <em>(Student)</em> -
+                    <a href="mailto:nguyentuthanhduy@outlook.com">nguyentuthanhduy@outlook.com</a>
+                </li>
+                <li>Huy Nguyen <em>(Student)</em> -
+                    <a href="mailto:nguyentuthanhduy@outlook.com">nguyenmanhhuy01@gmail.com</li>
             </ul>
         </p>
 
-        <!-- FOOTER -->
-        <footer class="site-footer">
-            <span class="site-footer-owner"><a href="https://github.com/duonghuuphuc/torch-helloworld" target="_blank">Torch HelloWorld</a> is maintained by <a href="http://it.tdt.edu.vn/~dhphuc/" target="_blank" title="Lecturer, Faculty of Information Technology, Ton Duc Thang University, Vietnam">Phuc H. Duong</a>.</span>
+        <h2>
+          <a id="contact" class="anchor" href="#contact" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Contact
+		</h2>
 
-            <span class="site-footer-credits">&copy; 2016 DHPIT. Last updated 12/11/2016 - 4:55 PM (GMT+7)</span>
-        </footer>
+		<p>
+			This tutorial may contain mistakes, thus I appreciate your feedback if you find some of them. Please feel free to send to me or one of my student an email!
+		</p>
+
+		<!-- FOOTER -->
+		<footer class="site-footer">
+			<span class="site-footer-owner"><a href="https://github.com/duonghuuphuc/torch-helloworld" target="_blank">Torch HelloWorld</a> is maintained by <a href="http://it.tdt.edu.vn/~dhphuc/" target="_blank" title="Lecturer, Faculty of Information Technology, Ton Duc Thang University, Vietnam">Phuc Duong</a>.</span>
+			<span class="site-footer-credits">&copy; 2016 DHPIT.</span>
+		</footer>
 
     </section>
 
 
 </body>
 
-</html>
-
-
-</html>
-l> tml> l>
+</html
