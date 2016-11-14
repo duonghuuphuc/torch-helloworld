@@ -5,6 +5,12 @@ This tutorial will introduce the basic approach to work with **Torch** for build
 
 The tutorial is available at http://torch.dhpit.com/
 
+### Source code ##
+The sample in our tutorial is available in this repository, together with sample data.
+
+ - For source code: `sample.lua`
+ - For data: `train.csv` and `test.csv`
+
 ### Contributors ##
 
  1. Phuc Duong - huuphucduong@gmail.com
