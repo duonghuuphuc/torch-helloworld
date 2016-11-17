@@ -36,11 +36,11 @@
         </h2>
 
         <p>
-            There are many Neural Network libraries available on the internet today. For example, you're familiar with Python, you can take advantage of <a href="https://www.tensorflow.org/" target="_blank">TensorFlow</a>, <a href="http://scikit-learn.org/"
-                target="_blank">sci-kit learn</a>. Or Java, you can use <a href="https://deeplearning4j.org" target="_blank">DeepLearning4J</a>. From my mentor's recommendation, I switch to <a href="http://torch.ch/" target="_blank">Torch</a>, a good and
-            easy to know framework for working with Neural Network models. In this article, I will focus on how-to use Torch for beginner, by going through my Hello World program. In my opinion, learning from Hello World program is a good approach for
-            getting started with new programming language. Besides that, as my knowledge, until the day this article goes online, this's the first article introduces about working with <a href="http://torch.ch/" target="_blank">Torch</a> in Microsoft
-            Windows environment in an easy way.
+            There are many Neural Network libraries available on the internet today. For example, you're familiar with Python, or you can take advantage of <a href="https://www.tensorflow.org/" target="_blank">TensorFlow</a>, <a href="http://scikit-learn.org/"
+                target="_blank">sci-kit learn</a>. Also in Java, you can use <a href="https://deeplearning4j.org" target="_blank">DeepLearning4J</a>. From my mentor's recommendation, I'd switch to <a href="http://torch.ch/" target="_blank">Torch</a>, a good and
+            easy to know framework for working with Neural Network models. In this tutorial, I will focus on how-to use Torch for beginners, by going through my Hello World program. In my opinion, learning from Hello World program is a good approach for
+            getting started with a new programming language. Since this tutorial goes online, this has been the first to introduce working with <a href="http://torch.ch/" target="_blank">Torch</a> on Microsoft's
+            Windows environment in an easy way so far.
         </p>
 
         <p>
@@ -64,11 +64,11 @@
         </h2>
 
         <p>
-            In order to working with my example program, and also know what I'll present, you need have the following prerequisites:
+            In order to work with my example program, and also to know how Torch works, you need to have the following prerequisites:
             <ul class="task-list">
-                <li>Microsoft Windows 10 (Version 1607), aka Windows 10 Anniversary Update</li>
-                <li><strong>Bash on Ubuntu on Windows</strong> is enabled [<a href="https://msdn.microsoft.com/en-us/commandline/wsl/install_guide" target="_blank">Readme</a>]</li>
-                <li><strong>Torch</strong> is installed in virtual Ubuntu on Windows [<a href="http://torch.ch/docs/getting-started.html" target="_blank">Readme</a>]</li>
+                <li>Microsoft Windows 10 (Build 1607), aka Windows 10 Anniversary Update or higher versions</li>
+                <li><strong>Bash on Ubuntu on Windows</strong> must be enabled [<a href="https://msdn.microsoft.com/en-us/commandline/wsl/install_guide" target="_blank">Readme</a>]</li>
+                <li><strong>Torch</strong> in virtual Ubuntu on Windows must be installed [<a href="http://torch.ch/docs/getting-started.html" target="_blank">Readme</a>]</li>
                 <li>Basic understanding of <strong>Lua</strong> programming language [<a href="https://www.tutorialspoint.com/lua/" target="_blank">Readme</a>]</li>
                 <li>Basic understanding of machine learning, artificial neural network [<a href="http://cs229.stanford.edu/" target="_blank">ML</a> | <a href="https://en.wikipedia.org/wiki/Artificial_neural_network" target="_blank">ANN</a>]</li>
             </ul>
@@ -79,7 +79,7 @@
         </h2>
 
         <p>
-            In Torch, the <code>nn</code> is the main package to build and train from simple to complex neural network model. To begin working with Torch, you need to define the following things:
+            In Torch, the <code>nn</code> is the main package to build and train from a simple to complex neural network model. To begin with Torch, you need to define the following contents:
             <ul class="task-list">
                 <li>Model</li>
                 <li>Training</li>
@@ -93,7 +93,7 @@
         </h3>
 
         <p>
-            The first thing in working with Torch is that you need to define a model. For example, you want a feed-forward network, a convolutional network, or a recurrent neural network. You also define the number of hidden layers, the number of hidden units for
+            The first thing in working with Torch is that you need to define a model. Which means whether you want a feed-forward network, a convolutional network, or a recurrent neural network. You also need to define the number of hidden layers, the number of hidden units for
             each layer, and the activation function which you want to use on each layer.<br> The <code>nn</code> package defines the containers as follows:
             <ul class="task-list">
                 <li><code>nn.Sequential</code>: plugs layers in a feed-forward fully connected manner</li>
@@ -101,7 +101,7 @@
                 <li><code>nn.Concat</code>: concatenates in one layer several modules along dimension <code>dim</code></li>
                 <li><code>nn.Bottle</code>: allows any dimensionality input be forwarded through a module</li>
             </ul>
-            In many cases, we use <code>nn.Sequential</code> since it's the most easy approach to feed data to the network, thus the program will look like:<br>
+            In many cases, we use <code>nn.Sequential as</code> since it's the most easy approach to feed data to the network, thus the program will look like:<br>
             <pre>
               <code>
                 require "nn"
@@ -122,19 +122,19 @@
                 mlp:add(nn.Linear(hiddenLayer2, output))
                 mlp:add(nn.LogSoftMax())
               </code>
-            </pre> The last two lines in above program declare the output layer. In this case, we define an output in 2-dimension, that means, our task is binary classificaton, and thus the <code>nn.LogSoftMax()</code> is the most common choice.<br>We
+            </pre> The last two lines in the program above declare the output layer. In this case, we define an output in 2 dimensions,which that means, our task is binary classificaton, and thus the <code>nn.LogSoftMax()</code> is the most common choice.<br>We
             should print our model to check whether it fits our need, by insert the following line:
             <pre>
               <code>
                 print(mlp)
               </code>
-            </pre> Now, at this point of the program, you can compile and run it. To execute this program, first, you have to save this file with the file extension is <code>.lua</code>, for example, named <code>sample.lua</code>. Then, open
-            the <strong>Bash on Ubuntu on Windows</strong>, and type the command as follows (you can use the <code>cd</code> command to change to directory of your saved file).
+            </pre> At this point of the program, you can compile and run it. To execute this program, first, you have to save this as the <code>.lua</code> extension, for example, save as <code>sample.lua</code>. Then, open 
+            <strong>Bash on Ubuntu on Windows</strong>, and type the command as follows (you can use <code>cd</code> command to change to the directory of your saved file).
             <pre>
               <code>
                 <strong>th</strong> sample.lua
               </code>
-            </pre> The program is executed, and print the following lines on the screen:
+            </pre>Now the program is executed, the following lines will be printed on the screen:
             <pre>
               <code>
                 nn.Sequential {
@@ -145,7 +145,7 @@
                   (4): nn.LogSoftMax
                 }
               </code>
-            </pre> To pre-test your model properly works and do what it's supposed to do, you can take the advantage of <code>Module:forward</code>.
+            </pre> To check if your model works properly , you can take the advantage of <code>Module:forward</code>.
             <pre>
               <code>
                 preTest = mlp:forward(torch.randn(1,10))
