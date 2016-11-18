@@ -37,10 +37,10 @@
 
         <p>
             There are many Neural Network libraries available on the internet today. For example, you're familiar with Python, or you can take advantage of <a href="https://www.tensorflow.org/" target="_blank">TensorFlow</a>, <a href="http://scikit-learn.org/"
-                target="_blank">sci-kit learn</a>. Also in Java, you can use <a href="https://deeplearning4j.org" target="_blank">DeepLearning4J</a>. From my mentor's recommendation, I'd switch to <a href="http://torch.ch/" target="_blank">Torch</a>, a good and
-            easy to know framework for working with Neural Network models. In this tutorial, I will focus on how-to use Torch for beginners, by going through my Hello World program. In my opinion, learning from Hello World program is a good approach for
-            getting started with a new programming language. Since this tutorial goes online, this has been the first to introduce working with <a href="http://torch.ch/" target="_blank">Torch</a> on Microsoft's
-            Windows environment in an easy way so far.
+                target="_blank">sci-kit learn</a>. Also in Java, you can use <a href="https://deeplearning4j.org" target="_blank">DeepLearning4J</a>. From my mentor's recommendation, I'd switch to <a href="http://torch.ch/" target="_blank">Torch</a>, a good
+            and easy to know framework for working with Neural Network models. In this tutorial, I will focus on how-to use Torch for beginners, by going through my Hello World program. In my opinion, learning from Hello World program is a good approach
+            for getting started with a new programming language. Since this tutorial goes online, this has been the first to introduce working with <a href="http://torch.ch/" target="_blank">Torch</a> on Microsoft's Windows environment in an easy way
+            so far.
         </p>
 
         <p>
@@ -55,7 +55,7 @@
                     <li><a href="#evaluation">Evaluation</a></li>
                 </ol>
                 <li><a href="#contributors">Contributors</a></li>
-				<li><a href="#contact">Contact</a></li>
+                <li><a href="#contact">Contact</a></li>
             </ol>
         </p>
 
@@ -93,8 +93,8 @@
         </h3>
 
         <p>
-            The first thing in working with Torch is that you need to define a model. Which means whether you want a feed-forward network, a convolutional network, or a recurrent neural network. You also need to define the number of hidden layers, the number of hidden units for
-            each layer, and the activation function which you want to use on each layer.<br> The <code>nn</code> package defines the containers as follows:
+            The first thing in working with Torch is that you need to define a model. Which means whether you want a feed-forward network, a convolutional network, or a recurrent neural network. You also need to define the number of hidden layers, the number of hidden
+            units for each layer, and the activation function which you want to use on each layer.<br> The <code>nn</code> package defines the containers as follows:
             <ul class="task-list">
                 <li><code>nn.Sequential</code>: plugs layers in a feed-forward fully connected manner</li>
                 <li><code>nn.Parallel</code>: plugs each element of input Tensor to different layers</li>
@@ -122,13 +122,13 @@
                 mlp:add(nn.Linear(hiddenLayer2, output))
                 mlp:add(nn.LogSoftMax())
               </code>
-            </pre> The last two lines in the program above declare the output layer. In this case, we define an output in 2 dimensions, which that means, our task is binary classificaton, and thus the <code>nn.LogSoftMax()</code> is the most common choice.<br>We
-            should print our model to check whether it fits our need, by insert the following line:
+            </pre> The last two lines in the program above declare the output layer. In this case, we define an output in 2 dimensions, which that means, our task is binary classificaton, and thus the <code>nn.LogSoftMax()</code> is the most
+            common choice.<br>We should print our model to check whether it fits our need, by insert the following line:
             <pre>
               <code>
                 print(mlp)
               </code>
-            </pre> At this point of the program, you can compile and run it. To execute this program, first, you have to save this as the <code>.lua</code> extension, for example, save as <code>sample.lua</code>. Then, open 
+            </pre> At this point of the program, you can compile and run it. To execute this program, first, you have to save this as the <code>.lua</code> extension, for example, save as <code>sample.lua</code>. Then, open
             <strong>Bash on Ubuntu on Windows</strong>, and type the command as follows (you can use <code>cd</code> command to change to the directory of your saved file).
             <pre>
               <code>
@@ -182,7 +182,7 @@
 
         <p>
             Until now, the last important thing is training dataset. Let's assume our dataset is stored in <a href="https://en.wikipedia.org/wiki/Comma-separated_values" target="_blank">CSV</a> format. Since Torch doesn't support splitting method, we
-            need to define such method as follows.
+            need to define such method as follows. Notice that Torch can't represent zero number (<code>0</code>) in dataset, thus if you want to represent binary class (positive/negative), you should use pair <code>{1,2}</code>.
 
             <pre>
               <code>
@@ -308,17 +308,17 @@
 
         <h2>
           <a id="contact" class="anchor" href="#contact" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Contact
-		</h2>
+                    </h2>
 
-		<p>
-			This tutorial may contain mistakes, please feel free to send us your feedback via email!
-		</p>
+                    <p>
+                        This tutorial may contain mistakes, please feel free to send us your feedback via email!
+                    </p>
 
-		<!-- FOOTER -->
-		<footer class="site-footer">
-			<span class="site-footer-owner"><a href="https://github.com/duonghuuphuc/torch-helloworld" target="_blank">Torch HelloWorld</a> is maintained by <a href="http://it.tdt.edu.vn/~dhphuc/" target="_blank" title="Lecturer, Faculty of Information Technology, Ton Duc Thang University, Vietnam">Phuc Duong</a>.</span>
-			<span class="site-footer-credits">&copy; 2016 DHPIT.</span>
-		</footer>
+                    <!-- FOOTER -->
+                    <footer class="site-footer">
+                        <span class="site-footer-owner"><a href="https://github.com/duonghuuphuc/torch-helloworld" target="_blank">Torch HelloWorld</a> is maintained by <a href="http://it.tdt.edu.vn/~dhphuc/" target="_blank" title="Lecturer, Faculty of Information Technology, Ton Duc Thang University, Vietnam">Phuc Duong</a>.</span>
+                        <span class="site-footer-credits">&copy; 2016 DHPIT.</span>
+                    </footer>
 
     </section>
 
